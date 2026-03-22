@@ -10,3 +10,4 @@ feishu-bot
 .claude/skills/*
 !.claude/skills/README.md
 .claude/sessions.json
+memory/created-files/
