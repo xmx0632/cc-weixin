@@ -20,6 +20,10 @@ if (noTui) {
   const { loadSession, login } = await import("./lib/auth.mjs");
   const { getUpdates, sendMessage, extractText } = await import("./lib/messaging.mjs");
   const { askClaude, handleCommand } = await import("./lib/claude.mjs");
+  const { clearAllHistoryOnStartup } = await import("./lib/session.mjs");
+
+  // 启动时清除历史记录，避免响应错乱
+  clearAllHistoryOnStartup();
 
   async function main() {
     let session = forceLogin ? null : loadSession();
