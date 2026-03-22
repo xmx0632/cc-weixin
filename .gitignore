@@ -5,4 +5,5 @@ dist/
 .env
 .weixin-token.json
 feishu-bot
-.claude/
+.claude/memory/SESSION_SUMMARY.md
+.claude/memory/sessions.json
