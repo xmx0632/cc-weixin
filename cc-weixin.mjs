@@ -19,7 +19,7 @@ if (noTui) {
   // ─── 纯 CLI 模式（原有逻辑） ─────────────────────────────────────
   const { loadSession, login } = await import("./lib/auth.mjs");
   const { getUpdates, sendMessage, extractText } = await import("./lib/messaging.mjs");
-  const { askClaude } = await import("./lib/claude.mjs");
+  const { askClaude, clearChatHistory } = await import("./lib/claude.mjs");
 
   async function main() {
     let session = forceLogin ? null : loadSession();
@@ -55,8 +55,17 @@ if (noTui) {
           console.log(`📩 [${new Date().toLocaleTimeString()}] ${from}`);
           console.log(`   ${text}`);
 
+          // 处理命令
+          if (text.trim() === "/clear") {
+            clearChatHistory(from);
+            const reply = "✅ 对话历史已清除";
+            await sendMessage(baseUrl, token, from, reply, ctx);
+            console.log(`   ✅ ${reply}\n`);
+            continue;
+          }
+
           process.stdout.write("   🤔 Claude 思考中...");
-          const reply = await askClaude(text);
+          const reply = await askClaude(text, from);
           process.stdout.write(" 完成\n");
 
           await sendMessage(baseUrl, token, from, reply, ctx);
