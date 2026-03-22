@@ -1,0 +1,63 @@
+{
+  "enabled": true,
+  "debug": false,
+  "preserveOriginal": true,
+  "mode": "balanced",
+  "filters": {
+    "websearch-sources": {
+      "enabled": true,
+      "description": "移除 WebSearch 的 Sources 部分，防止来源链接污染后续对话"
+    },
+    "tool-outputs": {
+      "enabled": true,
+      "summarizeLength": 100,
+      "description": "摘要处理工具输出（Bash、MCP 等），保留关键信息"
+    },
+    "system-messages": {
+      "enabled": true,
+      "description": "移除系统提示和调试信息（DEBUG、LOG、INFO 等）"
+    },
+    "repetitive-references": {
+      "enabled": true,
+      "historyThreshold": 10,
+      "description": "清理重复的历史引用（如前所述、之前提到等）"
+    },
+    "formatting-cleanup": {
+      "enabled": true,
+      "description": "清理格式问题（多余空行、行尾空格等）"
+    }
+  },
+  "presets": {
+    "strict": {
+      "description": "严格模式 - 最大化清理，最简洁的对话",
+      "filters": {
+        "websearch-sources": { "enabled": true },
+        "tool-outputs": { "enabled": true, "summarizeLength": 50 },
+        "system-messages": { "enabled": true },
+        "repetitive-references": { "enabled": true, "historyThreshold": 5 },
+        "formatting-cleanup": { "enabled": true }
+      }
+    },
+    "balanced": {
+      "description": "平衡模式 - 平衡简洁性和信息保留（默认）",
+      "filters": {
+        "websearch-sources": { "enabled": true },
+        "tool-outputs": { "enabled": true, "summarizeLength": 100 },
+        "system-messages": { "enabled": true },
+        "repetitive-references": { "enabled": true, "historyThreshold": 10 },
+        "formatting-cleanup": { "enabled": true }
+      }
+    },
+    "relaxed": {
+      "description": "宽松模式 - 保留更多信息，较少清理",
+      "filters": {
+        "websearch-sources": { "enabled": true },
+        "tool-outputs": { "enabled": false },
+        "system-messages": { "enabled": false },
+        "repetitive-references": { "enabled": false },
+        "formatting-cleanup": { "enabled": true }
+      }
+    }
+  },
+  "customFilters": []
+}
