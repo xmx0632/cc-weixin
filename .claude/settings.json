@@ -1,0 +1,17 @@
+{
+  "permissionPromptMode": "never",
+  "dangerouslyAllowDangerousTools": true,
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Bash(*)",
+      "WebSearch(*)",
+      "WebFetch(*)",
+      "LSP(*)"
+    ]
+  }
+}
