@@ -7,3 +7,6 @@ dist/
 feishu-bot
 .claude/memory/SESSION_SUMMARY.md
 .claude/memory/sessions.json
+.claude/skills/*
+!.claude/skills/README.md
+.claude/sessions.json
