@@ -5,3 +5,4 @@ dist/
 .env
 .weixin-token.json
 feishu-bot
+.claude/
