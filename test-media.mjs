@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * 测试媒体文件发送功能
- * 用法: node test-media.mjs <file_path> <user_id>
+ * 测试媒体文件上传功能（不发送）
+ * 用法: node test-media.mjs <file_path>
  */
 
 import { createRequire } from "node:module";
@@ -9,14 +9,13 @@ const require = createRequire(import.meta.url);
 try { require("dotenv").config(); } catch {}
 
 import { loadSession } from "./lib/auth.mjs";
-import { sendMediaFile } from "./lib/media.mjs";
+import { uploadFile, getMimeType, getMediaTypeFromMime, MediaType } from "./lib/media.mjs";
 
 const filePath = process.argv[2];
-const toUserId = process.argv[3];
 
-if (!filePath || !toUserId) {
-  console.log("用法: node test-media.mjs <file_path> <user_id>");
-  console.log("示例: node test-media.mjs ./demo.png xxx@im.wechat");
+if (!filePath) {
+  console.log("用法: node test-media.mjs <file_path>");
+  console.log("示例: node test-media.mjs ./demo.png");
   process.exit(1);
 }
 
@@ -28,34 +27,27 @@ async function main() {
     process.exit(1);
   }
 
-  const { token, baseUrl } = session;
+  const { token, baseUrl, userId } = session;
+  const toUserId = userId; // 发送给自己
 
-  console.log(`发送文件: ${filePath}`);
-  console.log(`目标用户: ${toUserId}`);
-
-  // 注意：测试时需要一个有效的 context_token
-  // 实际使用中，context_token 从收到的消息中获取
-  console.log("\n⚠️  注意: 此测试脚本需要有效的 context_token");
-  console.log("在实际使用中，context_token 从收到的微信消息中获取\n");
-
-  // 模拟一个 context_token（实际使用时需要从消息中获取）
-  const mockContextToken = "TEST_CONTEXT_TOKEN";
+  console.log(`\n文件: ${filePath}`);
+  console.log(`MIME类型: ${getMimeType(filePath)}`);
+  console.log(`媒体类型: ${["", "IMAGE", "VIDEO", "FILE"][getMediaTypeFromMime(getMimeType(filePath))]}`);
+  console.log(`目标用户: ${toUserId}\n`);
 
   try {
-    const result = await sendMediaFile({
-      filePath,
-      toUserId,
-      baseUrl,
-      token,
-      contextToken: mockContextToken,
-      caption: `发送测试文件: ${filePath}`,
-    });
+    console.log("开始上传...");
+    const uploaded = await uploadFile({ filePath, toUserId, baseUrl, token });
 
-    console.log(`✅ 发送成功!`);
-    console.log(`   消息ID: ${result.messageId}`);
-    console.log(`   媒体类型: ${result.mediaType}`);
+    console.log(`\n✅ 上传成功!`);
+    console.log(`   filekey: ${uploaded.filekey}`);
+    console.log(`   文件大小: ${uploaded.fileSize} bytes`);
+    console.log(`   密文大小: ${uploaded.fileSizeCiphertext} bytes`);
+    console.log(`   AES key: ${uploaded.aeskey.slice(0, 16)}...`);
+    console.log(`   downloadParam: ${uploaded.downloadEncryptedQueryParam.slice(0, 50)}...`);
   } catch (err) {
-    console.error(`❌ 发送失败: ${err.message}`);
+    console.error(`\n❌ 上传失败: ${err.message}`);
+    if (err.cause) console.error(`   原因: ${err.cause}`);
     process.exit(1);
   }
 }
