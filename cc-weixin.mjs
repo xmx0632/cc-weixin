@@ -21,6 +21,7 @@ if (noTui) {
   const { getUpdates, sendMessage, extractText } = await import("./lib/messaging.mjs");
   const { askClaude, handleCommand } = await import("./lib/claude.mjs");
   const { clearAllHistoryOnStartup } = await import("./lib/session.mjs");
+  const { sendMediaFile } = await import("./lib/media.mjs");
 
   // 启动时清除历史记录，避免响应错乱
   clearAllHistoryOnStartup();
@@ -62,17 +63,57 @@ if (noTui) {
           // 处理命令
           const cmdResult = handleCommand(text, from);
           if (cmdResult.handled) {
+            // 处理 /send 命令
+            if (cmdResult.sendFile) {
+              try {
+                console.log(`   📤 发送文件: ${cmdResult.sendFile}`);
+                const result = await sendMediaFile({
+                  filePath: cmdResult.sendFile,
+                  toUserId: from,
+                  baseUrl,
+                  token,
+                  contextToken: ctx,
+                });
+                console.log(`   ✅ 文件已发送 (${result.mediaType})\n`);
+              } catch (err) {
+                console.log(`   ❌ 文件发送失败: ${err.message}\n`);
+                await sendMessage(baseUrl, token, from, `文件发送失败: ${err.message}`, ctx);
+              }
+              continue;
+            }
+
             await sendMessage(baseUrl, token, from, cmdResult.reply, ctx);
             console.log(`   ✅ ${cmdResult.reply}\n`);
             continue;
           }
 
           process.stdout.write("   🤔 Claude 思考中...");
-          const reply = await askClaude(text, from);
+          const claudeResult = await askClaude(text, from);
           process.stdout.write(" 完成\n");
 
-          await sendMessage(baseUrl, token, from, reply, ctx);
-          console.log(`   ✅ ${reply.slice(0, 80)}${reply.length > 80 ? "…" : ""}\n`);
+          // 处理 Claude 返回的文件发送标记
+          if (claudeResult.files && claudeResult.files.length > 0) {
+            for (const filePath of claudeResult.files) {
+              try {
+                console.log(`   📤 发送文件: ${filePath}`);
+                const result = await sendMediaFile({
+                  filePath,
+                  toUserId: from,
+                  baseUrl,
+                  token,
+                  contextToken: ctx,
+                });
+                console.log(`   ✅ 文件已发送 (${result.mediaType})`);
+              } catch (err) {
+                console.log(`   ❌ 文件发送失败: ${err.message}`);
+                await sendMessage(baseUrl, token, from, `文件发送失败: ${err.message}`, ctx);
+              }
+            }
+          }
+
+          // 发送文本回复
+          await sendMessage(baseUrl, token, from, claudeResult.text, ctx);
+          console.log(`   ✅ ${claudeResult.text.slice(0, 80)}${claudeResult.text.length > 80 ? "…" : ""}\n`);
         }
       } catch (err) {
         if (err.message?.includes("session timeout") || err.message?.includes("-14")) {
