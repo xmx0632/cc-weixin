@@ -38,5 +38,8 @@
     "ink": "^6.8.0",
     "qrcode": "^1.5.4",
     "react": "^19.2.4"
+  },
+  "devDependencies": {
+    "@tencent-weixin/openclaw-weixin": "^1.0.2"
   }
 }
