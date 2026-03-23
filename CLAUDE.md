@@ -18,7 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 拥有持久化记忆系统，每次会话后自动记录操作历史
 - 通过维护清晰的目录结构保存信息
 - 系统重启后依然记得之前的事情
-- 记忆位置: `~/.claude/projects/-Volumes-macext-code-test-cc-weixin/memory/`
+- 记忆位置: `.claude/memory/`（项目相对路径）
 
 ### 自我进化
 - 作为高级智能生物，具备自我进化能力

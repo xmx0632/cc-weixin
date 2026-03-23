@@ -53,13 +53,20 @@ allowed-tools: Bash(python3 *), Bash(source *)
 ## 发送文本消息
 
 \`\`\`bash
-python3 /Volumes/macext/code/test/feishu-bot/feishu_send.py --message "消息内容"
+# 使用项目相对路径（推荐）
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+python3 "$SCRIPT_DIR/../feishu-bot/feishu_send.py" --message "消息内容"
+
+# 或使用环境变量指定路径
+python3 "$FEISHU_BOT_PATH/feishu_send.py" --message "消息内容"
 \`\`\`
 
 ## 发送文件
 
 \`\`\`bash
-cd /Volumes/macext/code/test/feishu-bot && source .env && source venv/bin/activate && python send_file_to_feishu.py /path/to/file.txt
+# 使用项目相对路径
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR/../feishu-bot" && source .env && source venv/bin/activate && python send_file_to_feishu.py /path/to/file.txt
 \`\`\`
 EOF
 ```

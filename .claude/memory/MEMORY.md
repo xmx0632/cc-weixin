@@ -40,7 +40,12 @@
 
 ### 飞书消息发送
 ```bash
-python3 /Volumes/macext/code/test/feishu-bot/feishu_send.py --message "消息内容"
+# 使用项目相对路径（推荐）
+./send-feishu.sh "消息内容"
+
+# 或设置环境变量
+# export FEISHU_BOT_PATH=/path/to/feishu-bot
+python3 "$FEISHU_BOT_PATH/feishu_send.py" --message "消息内容"
 ```
 
 ## 环境配置
