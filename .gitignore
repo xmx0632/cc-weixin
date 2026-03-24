@@ -9,5 +9,8 @@ feishu-bot
 .claude/memory/sessions.json
 .claude/skills/*
 !.claude/skills/README.md
+!.claude/skills/feishu-send/
+.claude/skills/feishu-send/.env
+.claude/skills/feishu-send/venv/
 .claude/sessions.json
 memory/created-files/
