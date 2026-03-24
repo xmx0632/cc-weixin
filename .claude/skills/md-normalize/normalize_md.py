@@ -13,11 +13,20 @@ from pathlib import Path
 
 # LaTeX 命令映射（注意：顺序很重要，长的命令要放在前面）
 LATEX_COMMANDS = [
-    (r'\\rr(?![a-zA-Z])', r'\\rightarrow'),  # \rr 但不是 \rrxxx
-    (r'\\ep(?![a-zA-Z])', r'\\epsilon'),     # \ep 但不是 \epsilon
+    (r'\\llrr(?![a-zA-Z])', r'\\Leftrightarrow'),  # \llrr
+    (r'\\lrr(?![a-zA-Z])', r'\\Leftrightarrow'),   # \lrr
+    (r'\\bec(?![a-zA-Z])', r'\\begin{cases}'),     # \bec
+    (r'\\eec(?![a-zA-Z])', r'\\end{cases}'),       # \eec
+    (r'\\thickapprox', r'\\approx'),                # \thickapprox
+    (r'\\rr(?![a-zA-Z])', r'\\rightarrow'),        # \rr 但不是 \rrxxx
+    (r'\\ep(?![a-zA-Z])', r'\\epsilon'),           # \ep 但不是 \epsilon
     (r'\\geqt(?![a-zA-Z])', r'\\geq'),
     (r'\\leqt(?![a-zA-Z])', r'\\leq'),
-    (r'\\al(?![a-zA-Z])', r'\\alpha'),       # \al 但不是 \alpha
+    (r'\\Dt(?![a-zA-Z])', r'\\Delta'),             # \Dt
+    (r'\\dt(?![a-zA-Z])', r'\\delta'),             # \dt
+    (r'\\ds(?![a-zA-Z])', r'\\displaystyle'),     # \ds
+    (r'\\bt(?![a-zA-Z])', r'\\beta'),              # \bt
+    (r'\\al(?![a-zA-Z])', r'\\alpha'),             # \al 但不是 \alpha
     (r'\\be(?![a-zA-Z])', r'\\beta'),
     (r'\\ga(?![a-zA-Z])', r'\\gamma'),
     (r'\\de(?![a-zA-Z])', r'\\delta'),
