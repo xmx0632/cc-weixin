@@ -15,6 +15,9 @@ feishu-bot
 .claude/sessions.json
 memory/created-files/
 
+# 接收文件下载目录
+downloads/
+
 # 测试音频文件
 *.wav
 *.mp3

@@ -21,7 +21,7 @@ if (noTui) {
   const { getUpdates, sendMessage, extractText } = await import("./lib/messaging.mjs");
   const { askClaude, handleCommand } = await import("./lib/claude.mjs");
   const { clearAllHistoryOnStartup } = await import("./lib/session.mjs");
-  const { sendMediaFile } = await import("./lib/media.mjs");
+  const { sendMediaFile, downloadMediaFile } = await import("./lib/media.mjs");
 
   // 启动时清除历史记录，避免响应错乱
   clearAllHistoryOnStartup();
@@ -54,8 +54,23 @@ if (noTui) {
           if (msg.message_type !== 1) continue;
 
           const from = msg.from_user_id;
-          const text = extractText(msg);
           const ctx = msg.context_token;
+
+          // 检查并下载接收到的文件
+          for (const item of msg.item_list ?? []) {
+            if (item.type === 4 || item.type === 2 || item.type === 3 || item.type === 5) {
+              // FILE, IMAGE, VOICE, VIDEO
+              const downloaded = await downloadMediaFile({
+                item,
+                outputDir: "./downloads",
+              });
+              if (downloaded) {
+                console.log(`   📥 已下载: ${downloaded.fileName} -> ${downloaded.filePath}`);
+              }
+            }
+          }
+
+          const text = extractText(msg);
 
           console.log(`📩 [${new Date().toLocaleTimeString()}] ${from}`);
           console.log(`   ${text}`);
