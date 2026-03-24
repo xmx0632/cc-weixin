@@ -14,3 +14,15 @@ feishu-bot
 .claude/skills/feishu-send/venv/
 .claude/sessions.json
 memory/created-files/
+
+# 测试音频文件
+*.wav
+*.mp3
+*.silk
+*.pcm
+
+# 测试视频文件
+*.mp4
+*.mov
+*.avi
+*.mkv
