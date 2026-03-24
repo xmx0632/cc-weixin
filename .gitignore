@@ -10,6 +10,7 @@ feishu-bot
 .claude/skills/*
 !.claude/skills/README.md
 !.claude/skills/feishu-send/
+!.claude/skills/math-tutor/
 .claude/skills/feishu-send/.env
 .claude/skills/feishu-send/venv/
 .claude/sessions.json
