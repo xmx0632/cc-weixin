@@ -83,6 +83,8 @@ npm start
 ANTHROPIC_AUTH_TOKEN=sk-your-api-key
 # 可选：自定义 API 地址
 # ANTHROPIC_BASE_URL=https://api.anthropic.com
+# 可选：指定使用的模型（默认：glm-4.7）
+# LLM_MODEL=claude-opus-4-6
 ```
 
 ### 运行

@@ -62,6 +62,8 @@ Create `.env` in project root:
 ANTHROPIC_AUTH_TOKEN=sk-your-api-key
 # Optional: custom API endpoint
 # ANTHROPIC_BASE_URL=https://api.anthropic.com
+# Optional: specify model to use (default: glm-4.7)
+# LLM_MODEL=claude-opus-4-6
 ```
 
 Session tokens stored in `~/.cc-weixin/token.json` after login.
