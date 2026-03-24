@@ -11,8 +11,15 @@ feishu-bot
 !.claude/skills/README.md
 !.claude/skills/feishu-send/
 !.claude/skills/math-tutor/
+!.claude/skills/math-tutorial/
+!.claude/skills/md-normalize/
+!.claude/skills/tex-to-md/
 .claude/skills/feishu-send/.env
 .claude/skills/feishu-send/venv/
+.claude/skills/tex-to-md/.venv/
+.claude/skills/md-normalize/.venv/
+.claude/agents/*
+!.claude/agents/*.md
 .claude/sessions.json
 memory/created-files/
 

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}} - 高等数学</title>
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --bg-color: #ffffff;
+            --text-color: #1f2937;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --success-color: #059669;
+            --warning-color: #d97706;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", Georgia, "Times New Roman", serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-color);
+            background: var(--bg-color);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1em;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        h2 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--secondary-color);
+            margin: 30px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        h4 {
+            font-size: 1.1em;
+            color: var(--text-color);
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        /* 定义框 - 蓝色 */
+        .definition {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #bfdbfe;
+            border-left: 5px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 20px 0;
+        }
+
+        .definition-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+
+        /* 定理框 - 绿色 */
+        .theorem {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #bbf7d0;
+            border-left: 5px solid var(--success-color);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 20px 0;
+        }
+
+        .theorem-title {
+            font-weight: bold;
+            color: var(--success-color);
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+
+        /* 证明框 */
+        .proof {
+            background: #fafafa;
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .proof-title {
+            font-weight: bold;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .qed {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* 例题框 - 黄色 */
+        .example {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1px solid #fde68a;
+            border-left: 5px solid var(--warning-color);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 20px 0;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: var(--warning-color);
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+
+        .example-content {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #fde68a;
+        }
+
+        .solution {
+            margin-top: 15px;
+        }
+
+        .solution-title {
+            font-weight: bold;
+            color: #059669;
+            margin-bottom: 8px;
+        }
+
+        /* 注释 - 浅黄 */
+        .note {
+            background: #fefce8;
+            border: 1px solid #fef08a;
+            border-radius: 6px;
+            padding: 12px 18px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .note-title {
+            font-weight: bold;
+            color: #ca8a04;
+        }
+
+        /* 警告/注意 */
+        .warning {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 6px;
+            padding: 12px 18px;
+            margin: 15px 0;
+        }
+
+        .warning-title {
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        /* 思考题 - 虚线框 */
+        .question {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px dashed var(--border-color);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin: 15px 0;
+        }
+
+        .question-title {
+            font-weight: bold;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        /* 知识回顾 */
+        .review {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 20px 0;
+        }
+
+        .review-title {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        /* 作业 - 紫色虚线 */
+        .homework {
+            background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+            border: 2px dashed #e879f9;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin: 30px 0;
+        }
+
+        .homework-title {
+            font-weight: bold;
+            color: #a21caf;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* 公式块 */
+        .formula-block {
+            background: rgba(255,255,255,0.8);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        /* 列表 */
+        ul, ol {
+            margin: 10px 0 15px 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* 强调 */
+        strong {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* 表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background: var(--light-bg);
+        }
+
+        /* 分隔线 */
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--border-color), transparent);
+            margin: 40px 0;
+        }
+
+        /* KaTeX 样式 */
+        .katex {
+            font-size: 1.05em;
+        }
+
+        .katex-display {
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            h1 { font-size: 1.8em; }
+            h2 { font-size: 1.4em; }
+            h3 { font-size: 1.2em; }
+            .definition, .theorem, .example {
+                padding: 15px;
+            }
+        }
+
+        /* 打印 */
+        @media print {
+            body {
+                max-width: 100%;
+                padding: 20px;
+            }
+            .definition, .theorem, .example {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+{{CONTENT}}
+
+</body>
+</html>
