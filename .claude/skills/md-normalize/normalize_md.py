@@ -84,6 +84,34 @@ def normalize_latex_commands(text: str) -> str:
     # 处理参数中含简单括号的情况 \dc{a}{b} 其中 a, b 可能是复合表达式
     result = re.sub(r'\\dc\s+', r'\\dfrac', result)
 
+    # ========== 修复 \dfrac 的不规范格式 ==========
+    # Pandoc 转换后 \dfrac{a}{b} 可能变成各种不规范的形式
+
+    # 1. \dfraca 2 -> \dfrac{a}{2} (命令后直接跟字母，没有空格)
+    result = re.sub(r'\\dfrac([a-zA-Z])\s+([a-zA-Z0-9+\\-])', r'\\dfrac{\1}{\2}', result)
+
+    # 2. \dfrac 1{n+1} -> \dfrac{1}{n+1} (第一个参数无花括号，第二个有)
+    result = re.sub(r'\\dfrac\s+([0-9a-zA-Z])\s*\{', r'\\dfrac{\1}{', result)
+
+    # 3. \dfrac1 2 -> \dfrac{1}{2} (两个参数都没有花括号，用空格分隔)
+    result = re.sub(r'\\dfrac([0-9a-zA-Z])\s+([0-9a-zA-Z])([^\s{])', r'\\dfrac{\1}{\2}\3', result)
+
+    # 4. \dfrac1 n -> \dfrac{1}{n} (参数后是空格或等号)
+    result = re.sub(r'\\dfrac([0-9a-zA-Z])\s+([0-9a-zA-Z])(?=\s|$|=|\\|\))', r'\\dfrac{\1}{\2}', result)
+
+    # 5. \dfracn n=1 -> \dfrac{n}{n}=1 (第一个参数无花括号，第二个也无，后接等号)
+    result = re.sub(r'\\dfrac([a-zA-Z0-9])\s+([a-zA-Z0-9])(?=[^a-zA-Z{])', r'\\dfrac{\1}{\2}', result)
+
+    # 6. \dfracn{n+1} -> \dfrac{n}{n+1} (第一个参数无花括号，第二个有)
+    # 已经被规则2覆盖，这里作为保险
+    result = re.sub(r'\\dfrac([a-zA-Z0-9]+)\{', r'\\dfrac{\1}{', result)
+
+    # 7. \dfrac 1{n+1} -> \dfrac{1}{n+1} (空格变花括号)
+    result = re.sub(r'\\dfrac\s+([0-9a-zA-Z])\s*\{', r'\\dfrac{\1}{', result)
+
+    # 8. 处理更复杂的情况：\dfrac a{b} -> \dfrac{a}{b}
+    result = re.sub(r'\\dfrac\s+([a-zA-Z0-9])\{', r'\\dfrac{\1}{', result)
+
     return result
 
 
@@ -100,6 +128,37 @@ def remove_pandoc_extensions(text: str) -> str:
 
     # 修复转义的列表点号 1\. -> 1.
     result = re.sub(r'^(\d+)\\\.(\s)', r'\1.\2', result, flags=re.MULTILINE)
+
+    # ========== 修复数学公式格式问题 ==========
+
+    # 1. 修复不完整的行内公式：$01 -> 可能是 \frac{0}{1} 被破坏
+    # 如果 $ 后面只有数字且没有匹配的结束符，尝试修复
+    result = re.sub(r'\$([0-9]+)(?=[^\d$]|$)', r'\\frac{\1}{1}', result)
+
+    # 2. 清理公式中多余的换行（在 $$...$$ 和 $...$ 内部）
+    # 匹配 $$...$$ 块公式中的换行
+    def clean_formula_newlines(match):
+        formula = match.group(0)
+        # 将公式内的多行换行替换为单个空格，但保留必要的结构
+        formula = re.sub(r'\n\s*\n\s*', ' ', formula)  # 多个空行变空格
+        formula = re.sub(r'\n\s+', ' ', formula)  # 换行+空格变空格
+        return formula
+
+    result = re.sub(r'\$\$[^\$]+?\$\$', clean_formula_newlines, result, flags=re.DOTALL)
+    result = re.sub(r'\$[^\$]+?\$', clean_formula_newlines, result)
+
+    # 3. 修复孤立的 $ 符号（不配对的情况）
+    # 检测单独的 $ 并尝试补全或移除
+    # 这里的策略：如果行尾有单独的 $，可能需要匹配前面或后面的内容
+
+    # 4. 修复公式中多余的分隔符和逗号
+    # 例如：$x, $ -> $x$
+    result = re.sub(r'\$([^\$]+),\s*\$', r'$\1$', result)
+    result = re.sub(r'\$([^\$]+),\s*\n', r'$\1$\n', result)
+
+    # 5. 修复公式末尾的截断问题
+    # 例如：$(1\leq n_1 -> $(1\leq n_1)$
+    result = re.sub(r'\$([^\$]*[<>=\leq\geq\\infty][^$]*)$(?=[^\s$]|$)', r'$\1$', result)
 
     return result
 
